@@ -1,0 +1,30 @@
+<style>
+div.warn {    
+    background-color: #fcf2f2;
+    border-color: #dFb5b4;
+    border-left: 5px solid #dfb5b4;
+    padding: 0.5em;
+    }
+
+div.exercise {    
+    background-color: #B0E0E6;
+    border-color: #B0E0E6;
+    border-left: 5px solid #1E90FF;
+    padding: 0.5em;
+    }
+
+div.info {    
+    background-color: #F5F5DC;
+    border-color: #F5F5DC;
+    border-left: 5px solid #DAA520;
+    padding: 0.5em;
+    }
+
+div.interlude {    
+    background-color: #E6E6FA;
+    border-color: #E6E6FA;
+    border-left: 5px solid #4B0082;
+    padding: 0.5em;
+    }
+
+ </style>

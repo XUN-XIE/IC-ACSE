@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Project 2: Armageddon - Atmospheric entry and disruption of asteroids &#8212; Armageddon  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="project-2-armageddon-atmospheric-entry-and-disruption-of-asteroids">
+<h1>Project 2: Armageddon - Atmospheric entry and disruption of asteroids<a class="headerlink" href="#project-2-armageddon-atmospheric-entry-and-disruption-of-asteroids" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="synopsis">
+<h2>Synopsis:<a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>Asteroids entering Earth’s atmosphere are subject to extreme drag forces
+that decelerate, heat and disrupt the space rocks. The fate of an
+asteroid is a complex function of its initial mass, speed, trajectory
+angle and internal strength.</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Asteroid">Asteroids</a> 10-100 m in
+diameter can penetrate deep into Earth’s atmosphere and disrupt
+catastrophically, generating an atmospheric disturbance
+(<a class="reference external" href="https://en.wikipedia.org/wiki/Air_burst">airburst</a>) that can cause
+<a class="reference external" href="https://www.youtube.com/watch?v=tq02C_3FvFo">damage on the ground</a>.
+Such an event occurred over the city of
+<a class="reference external" href="https://en.wikipedia.org/wiki/Chelyabinsk_meteor">Chelyabinsk</a> in
+Russia, in 2013, releasing energy equivalent to about 520 <a class="reference external" href="https://en.wikipedia.org/wiki/TNT_equivalent">kilotons of
+TNT</a> (1 kt TNT is
+equivalent to <span class="math notranslate nohighlight">\(4.184 \times 10^{12}\)</span> J), and injuring thousands of
+people (<a class="reference external" href="http://doi.org/10.1126/science.1242642">Popova et al.,
+2013</a>; <a class="reference external" href="http://doi.org/10.1038/nature12741">Brown et al.,
+2013</a>). An even larger event
+occurred over
+<a class="reference external" href="https://en.wikipedia.org/wiki/Tunguska_event">Tunguska</a>, an
+unpopulated area in Siberia, in 1908.</p>
+<p>The purpose of this exercise is to develop a fast numerical simulator to
+predict the fate of asteroids entering Earth’s atmosphere for the
+purposes of hazard assessment.</p>
+</div>
+<div class="section" id="problem-definition">
+<h2>Problem definition<a class="headerlink" href="#problem-definition" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="equations">
+<h3>Equations<a class="headerlink" href="#equations" title="Permalink to this headline">¶</a></h3>
+<p>The dynamics of an asteroid in Earth’s atmosphere is
+governed by a coupled set of ordinary differential equations:</p>
+<div class="math notranslate nohighlight">
+\begin{aligned}
+\frac{dv}{dt} &amp; = \frac{-C_D\rho_a A v^2}{2 m} + g \sin \theta \\
+\frac{dm}{dt} &amp; = \frac{-C_H\rho_a A v^3}{2 Q} \\
+\frac{d\theta}{dt} &amp; = \frac{g\cos\theta}{v} - \frac{C_L\rho_a A v}{2 m} - \frac{v\cos\theta}{R_P + z} \\
+\frac{dz}{dt} &amp; = -v\sin\theta \\
+\frac{dx}{dt} &amp; = \frac{v\cos\theta}{1 + z/R_P}
+\end{aligned}</div><p>In these equations, <span class="math notranslate nohighlight">\(v\)</span>, <span class="math notranslate nohighlight">\(m\)</span>, and <span class="math notranslate nohighlight">\(A\)</span> are the asteroid
+speed (along trajectory), mass and cross-sectional area, respectively.
+<span class="math notranslate nohighlight">\(\theta\)</span> is the meteoroid trajectory angle to the horizontal (in radians), <span class="math notranslate nohighlight">\(x\)</span> is the
+downrange distance of the meteoroid from its entry position, <span class="math notranslate nohighlight">\(z\)</span>
+is the altitude and <span class="math notranslate nohighlight">\(t\)</span> is time; <span class="math notranslate nohighlight">\(C_D\)</span> is the drag
+coefficient, <span class="math notranslate nohighlight">\(\rho_a\)</span> is the atmospheric density (a function of
+altitude ), <span class="math notranslate nohighlight">\(C_H\)</span> is an ablation efficiency coefficient, <span class="math notranslate nohighlight">\(Q\)</span>
+is the specific heat of ablation; <span class="math notranslate nohighlight">\(C_L\)</span> is a lift coefficient; and
+<span class="math notranslate nohighlight">\(R_P\)</span> is the planetary radius. All terms use MKS units.</p>
+<p>It is common to assume (for simplicity) that, prior to break-up, the
+radius (and cross-sectional area) of the asteroid remains constant;
+that is, any mass-loss by <strong>ablation</strong> does not change the
+cross-sectional area of the asteroid. We will further assume a spherical asteroid.</p>
+<p>A commonly used criterion for the break-up of an asteroid in the
+atmosphere is when the ram pressure of the air interacting with the
+asteroid <span class="math notranslate nohighlight">\(\rho_a v^2\)</span> first exceeds the strength of the asteroid
+<span class="math notranslate nohighlight">\(Y\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\rho_a v^2 = Y\]</div>
+<p>Should break-up occur, the asteroid deforms and spreads laterally as
+it continues its passage through the atmosphere. As a result its
+radius and cross-sectional area increase, but the asteroid density is
+assumed to remain constant (often referred to as ‘pancaking’).  It is
+conventional to define the cross-sectional area of the expanding cloud
+of fragments as <span class="math notranslate nohighlight">\(A = \pi r^2\)</span> (i.e., assuming a circular
+cross-section), for use in the above equations.</p>
+<p>Several models for the spreading rate <span class="math notranslate nohighlight">\(\frac{dr}{dt}\)</span> have been proposed. In the
+simplest model, the fragmented asteroid’s spreading rate is related to
+its along trajectory speed <a class="reference external" href="http://doi.org/10.1086/116499">(Hills and Goda, 1993)</a>:</p>
+<div class="math notranslate nohighlight">
+\[\frac{dr}{dt} = \left[\frac{7}{2}\alpha\frac{\rho_a}{\rho_m}\right]^{1/2} v\]</div>
+<p>Where <span class="math notranslate nohighlight">\(r\)</span> is the asteroid radius, <span class="math notranslate nohighlight">\(\rho_m\)</span> is the asteroid
+density and <span class="math notranslate nohighlight">\(\alpha\)</span> is a spreading coefficient, often taken to be
+0.3.</p>
+<p>Note that fragmentation and spreading <strong>ceases</strong> (<span class="math notranslate nohighlight">\(\frac{dr}{dt}
+= 0\)</span>) when the ram pressure drops back below the strength of the
+asteroid <span class="math notranslate nohighlight">\(\rho_a v^2 &lt; Y\)</span>.</p>
+<p>The figure below shows a typical solution to the above set of equations
+for an impact airburst scenario. The kinetic energy loss per unit
+height, which is a good approximation for the energy transferred to the
+atmosphere as heat (and is often referred to as the energy deposited per
+km altitude), is shown as a function of altitude.</p>
+<img alt="_images/airburst.png" src="_images/airburst.png" />
+<p>In this scenario the asteroid experiences breakup at approximately 48-km altitude (denoted by the star), before spreading and decelerating rapidly until an altitude of approximately 15 km at which point the <strong>energy loss per unit height</strong> is <strong>maximum</strong>. This point is often considered to be the <strong>burst altitude</strong>. The total kinetic energy lost by the asteroid at this point is a good estimate of the airburst energy (i.e., the total energy deposited into the atmosphere) for hazard analysis.</p>
+<p>Impact scenarios with a burst altitude well (&gt;5 km) above the surface can be considered to be <strong>airburst events</strong> and are unlikely to form a sizable crater on the ground. In such cases, even if a substantial fraction of the original asteroid survives to the ground it will be decelerated to a very small fraction of its initial speed.</p>
+<p>Impact scenarios with a burst altitude below the surface (i.e., peak energy deposition per unit height is not reached before the asteroid strikes the ground) will form a sizable impact crater on the ground and can be considered as a <strong>cratering event</strong> (although a sizable proportion of the original kinetic energy of the asteroid may be transferred to the air).</p>
+<p>Between these scenarios is a complex regime where a <strong>low altitude airburst combined with a substantial crater-forming event</strong> is likely. This regime is not well understood.</p>
+</div>
+</div>
+</div>
+<div class="section" id="module-armageddon">
+<span id="function-api"></span><h1>Function API<a class="headerlink" href="#module-armageddon" title="Permalink to this headline">¶</a></h1>
+<p>Python asteroid airburst calculator</p>
+<dl class="class">
+<dt id="armageddon.Planet">
+<em class="property">class </em><code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">Planet</code><span class="sig-paren">(</span><em class="sig-param">atmos_func='exponential'</em>, <em class="sig-param">atmos_filename='data/AltitudeDensityTable.csv'</em>, <em class="sig-param">Cd=1.0</em>, <em class="sig-param">Ch=0.1</em>, <em class="sig-param">Q=10000000.0</em>, <em class="sig-param">Cl=0.001</em>, <em class="sig-param">alpha=0.3</em>, <em class="sig-param">Rp=6371000.0</em>, <em class="sig-param">g=9.81</em>, <em class="sig-param">H=8000.0</em>, <em class="sig-param">rho0=1.2</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class called Planet is initialised with constants appropriate
+for the given target planet, including the atmospheric density profile
+and other constants</p>
+<p>Set up the initial parameters and constants for the target planet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atmos_func</strong> (<em>string</em><em>, </em><em>optional</em>) – Function which computes atmospheric density, rho, at altitude, z.
+Default is the exponential function <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">rho0</span> <span class="pre">exp(-z/H)</span></code>.
+Options are <code class="docutils literal notranslate"><span class="pre">exponential</span></code>, <code class="docutils literal notranslate"><span class="pre">tabular</span></code>, <code class="docutils literal notranslate"><span class="pre">constant</span></code> and <code class="docutils literal notranslate"><span class="pre">mars</span></code></p></li>
+<li><p><strong>atmos_filename</strong> (<em>string</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">atmos_func</span></code> = <code class="docutils literal notranslate"><span class="pre">'tabular'</span></code>, then set the filename of the table
+to be read in here.</p></li>
+<li><p><strong>Cd</strong> (<em>float</em><em>, </em><em>optional</em>) – The drag coefficient</p></li>
+<li><p><strong>Ch</strong> (<em>float</em><em>, </em><em>optional</em>) – The heat transfer coefficient</p></li>
+<li><p><strong>Q</strong> (<em>float</em><em>, </em><em>optional</em>) – The heat of ablation (J/kg)</p></li>
+<li><p><strong>Cl</strong> (<em>float</em><em>, </em><em>optional</em>) – Lift coefficient</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – Dispersion coefficient</p></li>
+<li><p><strong>Rp</strong> (<em>float</em><em>, </em><em>optional</em>) – Planet radius (m)</p></li>
+<li><p><strong>rho0</strong> (<em>float</em><em>, </em><em>optional</em>) – Air density at zero altitude (kg/m^3)</p></li>
+<li><p><strong>g</strong> (<em>float</em><em>, </em><em>optional</em>) – Surface gravity (m/s^2)</p></li>
+<li><p><strong>H</strong> (<em>float</em><em>, </em><em>optional</em>) – Atmospheric scale height (m)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="armageddon.Planet.RK4">
+<code class="sig-name descname">RK4</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">u0</em>, <em class="sig-param">t0</em>, <em class="sig-param">t_max</em>, <em class="sig-param">dt</em>, <em class="sig-param">strength</em>, <em class="sig-param">density</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet.RK4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the a coupled set of (total six) ordinary differential equations.
+Implement RK4 algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>velocity</strong> (<em>float</em>) – The entery speed of the asteroid in meters/second</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Initial mass</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – The initial trajectory angle of the asteroid to the horizontal
+By default, input is in degrees. If ‘radians’ is set to True, the
+input should be in radians</p></li>
+<li><p><strong>altitude</strong> (<em>float</em>) – Initial z-position (m)</p></li>
+<li><p><strong>distance</strong> (<em>float</em>) – Initial x-position (m)</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius of the asteroid in meters</p></li>
+<li><p><strong>t_max</strong> (<em>float</em>) – The maximum of setting time</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – The timestep</p></li>
+<li><p><strong>strength</strong> (<em>float</em>) – The strength of the asteroid (i.e., the ram pressure above which
+fragmentation and spreading occurs) in N/m^2 (Pa)</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – The density of the asteroid in kg/m^3</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Result</strong> – u = [velocity, mass, angle, altitude, distance, radius]
+t = [time]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="armageddon.Planet.analyse_outcome">
+<code class="sig-name descname">analyse_outcome</code><span class="sig-paren">(</span><em class="sig-param">result</em>, <em class="sig-param">strength=100000.0</em>, <em class="sig-param">plotting=False</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet.analyse_outcome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspect a prefound solution to calculate the impact and airburst stats</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> (<em>DataFrame</em>) – pandas DataFrame with velocity, mass, angle, altitude, horizontal
+distance, radius and dedz as a function of time</p></li>
+<li><p><strong>strength</strong> (<em>float</em>) – Specified by user when calling the impact function.
+Here it is used in the calcuations of the break-up altitude</p></li>
+<li><p><strong>plotting</strong> (<em>logical</em><em>, </em><em>optional</em>) – Allows the user to choose whether to graphically display the results.
+Default is set to False (no plotting).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><strong>outcome</strong> – dictionary with details of airburst and/or cratering event.
+For an airburst, this will contain the following keys:
+<code class="docutils literal notranslate"><span class="pre">burst_peak_dedz</span></code>, <code class="docutils literal notranslate"><span class="pre">burst_altitude</span></code>, <code class="docutils literal notranslate"><span class="pre">burst_total_ke_lost</span></code>.</p>
+<p>For a cratering event, this will contain the following keys:
+<code class="docutils literal notranslate"><span class="pre">impact_time</span></code>, <code class="docutils literal notranslate"><span class="pre">impact_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">impact_speed</span></code>.</p>
+<p>All events should also contain an entry with the key <code class="docutils literal notranslate"><span class="pre">outcome</span></code>,
+which should contain one of the following strings:
+<code class="docutils literal notranslate"><span class="pre">Airburst</span></code>, <code class="docutils literal notranslate"><span class="pre">Cratering</span></code> or <code class="docutils literal notranslate"><span class="pre">Airburst</span> <span class="pre">and</span> <span class="pre">cratering</span></code></p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="armageddon.Planet.calculate_energy">
+<code class="sig-name descname">calculate_energy</code><span class="sig-paren">(</span><em class="sig-param">result</em>, <em class="sig-param">method='central'</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet.calculate_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to calculate the kinetic energy lost per unit altitude in
+kilotons TNT per km, for a given solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> (<em>DataFrame</em>) – A pandas DataFrame with columns for the velocity, mass, angle,
+altitude, horizontal distance and radius as a function of time</p></li>
+<li><p><strong>method</strong> (<em>string</em>) – Method to be used for numerical differenciation. Choice in:
+‘forward’, ‘backward’, ‘central’, ‘undertermined_coeff’ and
+‘analytical’.
+By default, analytical calculations are used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Result</strong> – Returns the DataFrame with additional column <code class="docutils literal notranslate"><span class="pre">dedz</span></code> which is the
+kinetic energy lost per unit altitude</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="armageddon.Planet.deg_to_rad">
+<code class="sig-name descname">deg_to_rad</code><span class="sig-paren">(</span><em class="sig-param">deg</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet.deg_to_rad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert degree to radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deg</strong> (<em>float</em>) – The degree of the input angle.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Result</strong> – The radians of the input angle.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="armageddon.Planet.f_msd">
+<code class="sig-name descname">f_msd</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">u</em>, <em class="sig-param">strength</em>, <em class="sig-param">density</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet.f_msd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a coupled set of (total six) ordinary differential equations</p>
+<blockquote>
+<div><p>f[0]:dv/dt
+f[1]:dm/dt
+f[2]:d(theta)/dt
+f[3]:dz/dt
+f[4]:dx/dt
+f[5]:dr/dt</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>velocity</strong> (<em>float</em>) – The entery speed of the asteroid in meters/second</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Initial mass</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – The initial trajectory angle of the asteroid to the horizontal
+By default, input is in degrees. If ‘radians’ is set to True, the
+input should be in radians</p></li>
+<li><p><strong>altitude</strong> (<em>float</em>) – Initial z-position (m)</p></li>
+<li><p><strong>distance</strong> (<em>float</em>) – Initial x-position (m)</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The radius of the asteroid in meters</p></li>
+<li><p><strong>strength</strong> (<em>float</em>) – The strength of the asteroid (i.e., the ram pressure above which
+fragmentation and spreading occurs) in N/m^2 (Pa)</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – The density of the asteroid in kg/m^3</p></li>
+<li><p><strong>a list of u</strong> (<em>Define</em>) – </p></li>
+<li><p><strong>=</strong><strong> [</strong><strong>velocity</strong><strong>, </strong><strong>mass</strong><strong>, </strong><strong>angle</strong><strong>, </strong><strong>altitude</strong><strong>, </strong><strong>distance</strong><strong>, </strong><strong>radius</strong><strong>]</strong> (<em>u</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Result</strong> – f[0, 1, 2, 3, 4, 5]
+f[0]:dv/dt
+f[1]:dm/dt
+f[2]:d(theta)/dt
+f[3]:dz/dt
+f[4]:dx/dt
+f[5]:dr/dt</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="armageddon.Planet.impact">
+<code class="sig-name descname">impact</code><span class="sig-paren">(</span><em class="sig-param">radius</em>, <em class="sig-param">velocity</em>, <em class="sig-param">density</em>, <em class="sig-param">strength</em>, <em class="sig-param">angle</em>, <em class="sig-param">init_altitude=100000.0</em>, <em class="sig-param">dt=0.05</em>, <em class="sig-param">radians=False</em>, <em class="sig-param">plotting=False</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet.impact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the system of differential equations for a given impact event.
+Also calculates the kinetic energy lost per unit altitude and
+analyses the result to determine the outcome of the impact.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – The radius of the asteroid in meters</p></li>
+<li><p><strong>velocity</strong> (<em>float</em>) – The entery speed of the asteroid in meters/second</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – The density of the asteroid in kg/m^3</p></li>
+<li><p><strong>strength</strong> (<em>float</em>) – The strength of the asteroid (i.e., the ram pressure above which
+fragmentation and spreading occurs) in N/m^2 (Pa)</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – The initial trajectory angle of the asteroid to the horizontal
+By default, input is in degrees. If ‘radians’ is set to True, the
+input should be in radians</p></li>
+<li><p><strong>init_altitude</strong> (<em>float</em><em>, </em><em>optional</em>) – Initial altitude in m</p></li>
+<li><p><strong>dt</strong> (<em>float</em><em>, </em><em>optional</em>) – The output timestep, in s</p></li>
+<li><p><strong>radians</strong> (<em>logical</em><em>, </em><em>optional</em>) – Whether angles should be given in degrees or radians. Default=False
+Angles returned in the DataFrame will have the same units as the
+input</p></li>
+<li><p><strong>plotting</strong> (<em>logical</em><em>, </em><em>optional</em>) – Allows the user to choose whether to plot the results graphically or not.
+Default is set to False (no plotting).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>Result</strong> (<em>DataFrame</em>) – A pandas DataFrame containing the solution to the system.
+Includes the following columns:
+<code class="docutils literal notranslate"><span class="pre">velocity</span></code>, <code class="docutils literal notranslate"><span class="pre">mass</span></code>, <code class="docutils literal notranslate"><span class="pre">angle</span></code>, <code class="docutils literal notranslate"><span class="pre">altitude</span></code>,
+<code class="docutils literal notranslate"><span class="pre">distance</span></code>, <code class="docutils literal notranslate"><span class="pre">radius</span></code>, <code class="docutils literal notranslate"><span class="pre">time</span></code>, <code class="docutils literal notranslate"><span class="pre">dedz</span></code></p></li>
+<li><p><strong>outcome</strong> (<em>Dict</em>) – dictionary with details of airburst and/or cratering event.
+For an airburst, this will contain the following keys:
+<code class="docutils literal notranslate"><span class="pre">burst_peak_dedz</span></code>, <code class="docutils literal notranslate"><span class="pre">burst_altitude</span></code>, <code class="docutils literal notranslate"><span class="pre">burst_total_ke_lost</span></code>.</p>
+<p>For a cratering event, this will contain the following keys:
+<code class="docutils literal notranslate"><span class="pre">impact_time</span></code>, <code class="docutils literal notranslate"><span class="pre">impact_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">impact_speed</span></code>.</p>
+<p>All events should also contain an entry with the key <code class="docutils literal notranslate"><span class="pre">outcome</span></code>,
+which should contain one of the following strings:
+<code class="docutils literal notranslate"><span class="pre">Airburst</span></code>, <code class="docutils literal notranslate"><span class="pre">Cratering</span></code> or <code class="docutils literal notranslate"><span class="pre">Airburst</span> <span class="pre">and</span> <span class="pre">cratering</span></code></p>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="armageddon.Planet.solve_atmospheric_entry">
+<code class="sig-name descname">solve_atmospheric_entry</code><span class="sig-paren">(</span><em class="sig-param">radius</em>, <em class="sig-param">velocity</em>, <em class="sig-param">density</em>, <em class="sig-param">strength</em>, <em class="sig-param">angle</em>, <em class="sig-param">init_altitude=100000.0</em>, <em class="sig-param">dt=0.05</em>, <em class="sig-param">radians=False</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.Planet.solve_atmospheric_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the system of differential equations for a given impact scenario</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – The radius of the asteroid in meters</p></li>
+<li><p><strong>velocity</strong> (<em>float</em>) – The entery speed of the asteroid in meters/second</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – The density of the asteroid in kg/m^3</p></li>
+<li><p><strong>strength</strong> (<em>float</em>) – The strength of the asteroid (i.e., the ram pressure above which
+fragmentation and spreading occurs) in N/m^2 (Pa)</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – The initial trajectory angle of the asteroid to the horizontal
+By default, input is in degrees. If ‘radians’ is set to True, the
+input should be in radians</p></li>
+<li><p><strong>init_altitude</strong> (<em>float</em><em>, </em><em>optional</em>) – Initial altitude in m</p></li>
+<li><p><strong>dt</strong> (<em>float</em><em>, </em><em>optional</em>) – The output timestep, in s</p></li>
+<li><p><strong>radians</strong> (<em>logical</em><em>, </em><em>optional</em>) – Whether angles should be given in degrees or radians. Default=False
+Angles returned in the DataFrame will have the same units as the
+input</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Result</strong> – A pandas DataFrame containing the solution to the system.
+Includes the following columns:
+<code class="docutils literal notranslate"><span class="pre">velocity</span></code>, <code class="docutils literal notranslate"><span class="pre">mass</span></code>, <code class="docutils literal notranslate"><span class="pre">angle</span></code>, <code class="docutils literal notranslate"><span class="pre">altitude</span></code>,
+<code class="docutils literal notranslate"><span class="pre">distance</span></code>, <code class="docutils literal notranslate"><span class="pre">radius</span></code>, <code class="docutils literal notranslate"><span class="pre">time</span></code></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="armageddon.analyse_data">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">analyse_data</code><span class="sig-paren">(</span><em class="sig-param">planet</em>, <em class="sig-param">rho_m</em>, <em class="sig-param">theta</em>, <em class="sig-param">velocity_entry</em>, <em class="sig-param">datapath</em>, <em class="sig-param">r_tol=0.01</em>, <em class="sig-param">r_min=0.01</em>, <em class="sig-param">r_max=4500.0</em>, <em class="sig-param">Y_tol=1000.0</em>, <em class="sig-param">Y_min=1000.0</em>, <em class="sig-param">Y_max=1000000000000.0</em>, <em class="sig-param">plotting=True</em>, <em class="sig-param">step=False</em>, <em class="sig-param">max_step=20</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.analyse_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to fit asteroid parameters (radius r and strength Y) to
+a given dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>planet</strong> – Class</p></li>
+<li><p><strong>rho_m</strong> (<em>float</em>) – Meteor density in kg/m-3</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Meteor entry angle in degrees</p></li>
+<li><p><strong>velocity_entry</strong> (<em>float</em>) – Meteor entry velocity in m/s</p></li>
+<li><p><strong>datapath</strong> (<em>string</em>) – Path to csv file containing event altitude in km in first column and
+event energy per km altitude in the second column in Kt/km</p></li>
+<li><p><strong>r_tol</strong> (<em>float</em><em>, </em><em>optional</em>) – Tolerance of radius result. As default, the radius is given to the
+closest cm (1e-2 m)</p></li>
+<li><p><strong>r_min</strong> (<em>float</em><em>, </em><em>optional</em>) – Estimated minimum possible initial radius for the event. As default,
+r_min is taken as default r_tol</p></li>
+<li><p><strong>r_max</strong> (<em>float</em><em>, </em><em>optional</em>) – Estimated maximum possible initial radius for the event. As default,
+r_max is taken as the radius of a one per 100Ma event (4500m)</p></li>
+<li><p><strong>Y_tol</strong> (<em>float</em><em>, </em><em>optional</em>) – Tolerance of strength result. As default, the strength is given to
+the nearest kPa (1e3 Pa)</p></li>
+<li><p><strong>Y_min</strong> (<em>float</em><em>, </em><em>optional</em>) – Estimated minimum possible material strength. As default, Y_min is
+taken as default Y_tol</p></li>
+<li><p><strong>Y_max</strong> (<em>float</em><em>, </em><em>optional</em>) – Estimated maximum possible material strength. As default, Y_max is
+taken as the strength of graphine (1e12Pa)</p></li>
+<li><p><strong>plotting</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If plotting is ‘True’, plotting is turned on. By default, plotting is
+‘True’.</p></li>
+<li><p><strong>step</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If step is ‘True’ and plotting is ‘True’, returns a plot including
+the intermediate convergence.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="armageddon.calculate_mse">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">calculate_mse</code><span class="sig-paren">(</span><em class="sig-param">earth</em>, <em class="sig-param">radius=10</em>, <em class="sig-param">strength=100000.0</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.calculate_mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate the mean square error of fit model to the original model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – asteroid radius</p></li>
+<li><p><strong>strength</strong> (<em>float</em>) – asteroid strength</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mse</strong> – square distance between burst points of fit model and raw data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="armageddon.compute">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">compute</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.compute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute several dask collections at once.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<em>object</em>) – Any number of objects. If it is a dask object, it’s computed and the
+result is returned. By default, python builtin collections are also
+traversed to look for dask objects (for more information see the
+<code class="docutils literal notranslate"><span class="pre">traverse</span></code> keyword). Non-dask arguments are passed through unchanged.</p></li>
+<li><p><strong>traverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – By default dask traverses builtin python collections looking for dask
+objects passed to <code class="docutils literal notranslate"><span class="pre">compute</span></code>. For large collections this can be
+expensive. If none of the arguments contain any dask objects, set
+<code class="docutils literal notranslate"><span class="pre">traverse=False</span></code> to avoid doing this traversal.</p></li>
+<li><p><strong>scheduler</strong> (<em>string</em><em>, </em><em>optional</em>) – Which scheduler to use like “threads”, “synchronous” or “processes”.
+If not provided, the default is to check the global settings first,
+and then fall back to the collection defaults.</p></li>
+<li><p><strong>optimize_graph</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True [default], the optimizations for each collection are applied
+before computation. Otherwise the graph is run as is. This can be
+useful for debugging.</p></li>
+<li><p><strong>kwargs</strong> – Extra keywords to forward to the scheduler function.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compute</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">(45, 4.5)</span>
+</pre></div>
+</div>
+<p>By default, dask objects inside python collections will also be computed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compute</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>  <span class="c1"># doctest: +SKIP</span>
+<span class="go">({&#39;a&#39;: 45, &#39;b&#39;: 4.5, &#39;c&#39;: 1},)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armageddon.cpu_count">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">cpu_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.cpu_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of CPUs in the system</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="armageddon.delayed">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">delayed</code><a class="headerlink" href="#armageddon.delayed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps a function or object to produce a <code class="docutils literal notranslate"><span class="pre">Delayed</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Delayed</span></code> objects act as proxies for the object they wrap, but all
+operations on them are done lazily by building up a dask graph internally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>object</em>) – The function or object to wrap</p></li>
+<li><p><strong>name</strong> (<em>string</em><em> or </em><em>hashable</em><em>, </em><em>optional</em>) – The key to use in the underlying graph for the wrapped object. Defaults
+to hashing content. Note that this only affects the name of the object
+wrapped by this call to delayed, and <em>not</em> the output of delayed
+function calls - for that use <code class="docutils literal notranslate"><span class="pre">dask_key_name=</span></code> as described below.</p></li>
+<li><p><strong>pure</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates whether calling the resulting <code class="docutils literal notranslate"><span class="pre">Delayed</span></code> object is a pure
+operation. If True, arguments to the call are hashed to produce
+deterministic keys. If not provided, the default is to check the global
+<code class="docutils literal notranslate"><span class="pre">delayed_pure</span></code> setting, and fallback to <code class="docutils literal notranslate"><span class="pre">False</span></code> if unset.</p></li>
+<li><p><strong>nout</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of outputs returned from calling the resulting <code class="docutils literal notranslate"><span class="pre">Delayed</span></code>
+object. If provided, the <code class="docutils literal notranslate"><span class="pre">Delayed</span></code> output of the call can be iterated
+into <code class="docutils literal notranslate"><span class="pre">nout</span></code> objects, allowing for unpacking of results. By default
+iteration over <code class="docutils literal notranslate"><span class="pre">Delayed</span></code> objects will error. Note, that <code class="docutils literal notranslate"><span class="pre">nout=1</span></code>
+expects <code class="docutils literal notranslate"><span class="pre">obj</span></code>, to return a tuple of length 1, and consequently for
+<code class="docutils literal notranslate"><span class="pre">nout=0</span></code>, <code class="docutils literal notranslate"><span class="pre">obj</span></code> should return an empty tuple.</p></li>
+<li><p><strong>traverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – By default dask traverses builtin python collections looking for dask
+objects passed to <code class="docutils literal notranslate"><span class="pre">delayed</span></code>. For large collections this can be
+expensive. If <code class="docutils literal notranslate"><span class="pre">obj</span></code> doesn’t contain any dask objects, set
+<code class="docutils literal notranslate"><span class="pre">traverse=False</span></code> to avoid doing this traversal.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Apply to functions to delay execution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">inc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inc</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">11</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">inc</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="n">Delayed</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="go">11</span>
+</pre></div>
+</div>
+<p>Can be used as a decorator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@delayed</span><span class="p">(</span><span class="n">pure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">delayed</span></code> also accepts an optional keyword <code class="docutils literal notranslate"><span class="pre">pure</span></code>. If False, then
+subsequent calls will always produce a different <code class="docutils literal notranslate"><span class="pre">Delayed</span></code>. This is
+useful for non-pure functions (such as <code class="docutils literal notranslate"><span class="pre">time</span></code> or <code class="docutils literal notranslate"><span class="pre">random</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out1</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">random</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">)()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out2</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">random</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">)()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out1</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">out2</span><span class="o">.</span><span class="n">key</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>If you know a function is pure (output only depends on the input, with no
+global state), then you can set <code class="docutils literal notranslate"><span class="pre">pure=True</span></code>. This will attempt to apply a
+consistent name to the output, but will fallback on the same behavior of
+<code class="docutils literal notranslate"><span class="pre">pure=False</span></code> if this fails.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@delayed</span><span class="p">(</span><span class="n">pure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out1</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out2</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out1</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">out2</span><span class="o">.</span><span class="n">key</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Instead of setting <code class="docutils literal notranslate"><span class="pre">pure</span></code> as a property of the callable, you can also set
+it contextually using the <code class="docutils literal notranslate"><span class="pre">delayed_pure</span></code> setting. Note that this
+influences the <em>call</em> and not the <em>creation</em> of the callable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dask</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@delayed</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">mul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">delayed_pure</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">mul</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">mul</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">delayed_pure</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">mul</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">mul</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>The key name of the result of calling a delayed object is determined by
+hashing the arguments by default. To explicitly set the name, you can use
+the <code class="docutils literal notranslate"><span class="pre">dask_key_name</span></code> keyword when calling the function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>    <span class="c1"># doctest: +SKIP</span>
+<span class="go">Delayed(&#39;add-3dce7c56edd1ac2614add714086e950f&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dask_key_name</span><span class="o">=</span><span class="s1">&#39;three&#39;</span><span class="p">)</span>
+<span class="go">Delayed(&#39;three&#39;)</span>
+</pre></div>
+</div>
+<p>Note that objects with the same key name are assumed to have the same
+result. If you set the names explicitly you should make sure your key names
+are different for different results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dask_key_name</span><span class="o">=</span><span class="s1">&#39;three&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dask_key_name</span><span class="o">=</span><span class="s1">&#39;three&#39;</span><span class="p">)</span>  <span class="c1"># doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dask_key_name</span><span class="o">=</span><span class="s1">&#39;four&#39;</span><span class="p">)</span>   <span class="c1"># doctest: +SKIP</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">delayed</span></code> can also be applied to objects to make operations on them lazy:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">Delayed</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="go">[1, 2, 3]</span>
+</pre></div>
+</div>
+<p>The key name of a delayed object is hashed by default if <code class="docutils literal notranslate"><span class="pre">pure=True</span></code> or
+is generated randomly if <code class="docutils literal notranslate"><span class="pre">pure=False</span></code> (default).  To explicitly set the
+name, you can use the <code class="docutils literal notranslate"><span class="pre">name</span></code> keyword:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;mylist&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">Delayed(&#39;mylist&#39;)</span>
+</pre></div>
+</div>
+<p>Delayed results act as a proxy to the underlying object. Many operators
+are supported:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="go">[1, 2, 3, 1, 2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>Method and attribute access also works:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p>Note that if a method doesn’t exist, no error will be thrown until runtime:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">not_a_real_method</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP</span>
+<span class="go">AttributeError(&quot;&#39;list&#39; object has no attribute &#39;not_a_real_method&#39;&quot;)</span>
+</pre></div>
+</div>
+<p>“Magic” methods (e.g. operators and attribute access) are assumed to be
+pure, meaning that subsequent calls must return the same results. This
+behavior is not overrideable through the <code class="docutils literal notranslate"><span class="pre">delayed</span></code> call, but can be
+modified using other ways as described below.</p>
+<p>To invoke an impure attribute or operator, you’d need to use it in a
+delayed function with <code class="docutils literal notranslate"><span class="pre">pure=False</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Incrementer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">... </span>    <span class="nd">@property</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">n</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">Incrementer</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">key</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_n</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_n</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">get_n</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">key</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>In contrast, methods are assumed to be impure by default, meaning that
+subsequent calls may return different results. To assume purity, set
+<cite>pure=True</cite>. This allows sharing of any intermediate values.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">a</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">pure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">key</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>As with function calls, method calls also respect the global
+<code class="docutils literal notranslate"><span class="pre">delayed_pure</span></code> setting and support the <code class="docutils literal notranslate"><span class="pre">dask_key_name</span></code> keyword:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dask_key_name</span><span class="o">=</span><span class="s2">&quot;count_2&quot;</span><span class="p">)</span>
+<span class="go">Delayed(&#39;count_2&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">delayed_pure</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">a</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armageddon.fit_out">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">fit_out</code><span class="sig-paren">(</span><em class="sig-param">earth</em>, <em class="sig-param">radius</em>, <em class="sig-param">strength</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.fit_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate altitude and energy applying solver</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – ateroid radius</p></li>
+<li><p><strong>strength</strong> (<em>float</em>) – ateroid strength</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>com_z</strong> (<em>array</em>) – the altitude sliced to range after brea-up</p></li>
+<li><p><strong>com_ek</strong> (<em>array</em>) – energy per heiight sliced to range after brea-up</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="armageddon.mars">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">mars</code><span class="sig-paren">(</span><em class="sig-param">z</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.mars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Atmosphere density calculation on Mars.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>z</strong> (<em>float</em>) – The altitude.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Result</strong> – The atmosphere density at input altitude on Mars.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="armageddon.solve_ensemble">
+<code class="sig-prename descclassname">armageddon.</code><code class="sig-name descname">solve_ensemble</code><span class="sig-paren">(</span><em class="sig-param">planet, fiducial_impact={'angle': 45, 'density': 3000.0, 'radius': 10, 'strength': 100000.0, 'velocity': 21000.0}, variables=['radius', 'angle', 'strength', 'velocity', 'density'], radians=False, rmin=8, rmax=12, visual=False, sample_num=10</em><span class="sig-paren">)</span><a class="headerlink" href="#armageddon.solve_ensemble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run asteroid simulation for a distribution of initial conditions and
+find the burst distribution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>planet</strong> (<em>object</em>) – The Planet class instance on which to perform the ensemble calculation</p></li>
+<li><p><strong>fiducial_impact</strong> (<em>dict</em>) – Dictionary of the fiducial values of radius, angle, strength, velocity
+and density</p></li>
+<li><p><strong>variables</strong> (<em>list</em>) – List of strings of all impact parameters to be varied in the ensemble
+calculation</p></li>
+<li><p><strong>rmin</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum radius, in m, to use in the ensemble calculation,
+if radius is one of the parameters to be varied.</p></li>
+<li><p><strong>rmax</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum radius, in m, to use in the ensemble calculation,
+if radius is one of the parameters to be varied.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ensemble</strong> – DataFrame with columns of any parameters that are varied and the
+airburst altitude</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Armageddon</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

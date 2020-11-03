@@ -1,0 +1,63 @@
+{
+    "postcode file" : ["..","flood_tool","resources","postcodes.csv"],
+    "flood probability file" : ["..","flood_tool","resources","flood_probability.csv"],
+    "property value file" : ["..","flood_tool","resources","property_value.csv"],
+    "test data" : [ "test_data.csv" ],
+    "timeouts" : { "tool" : 300,
+		   "get_easting_northing_from_lat_long" : 120,
+		   "get_lat_long" : 60,
+		   "get_easting_northing_flood_probability" : 300,
+		   "get_sorted_flood_probability" : 240,
+		   "get_flood_cost" : 120,
+		   "get_annual_flood_risk" : 240,
+		   "get_sorted_annual_flood_risk" : 240
+		   },
+    "get_lat_long" : {"idx1" : 0,
+		      "idx2" : 500,
+		      "input headings" : ["Postcode"],
+		      "output headings" : ["Latitude", "Longitude"],
+		      "tolerance" : 1.0e-8,
+		      "score" : 500
+                    },
+    "get_easting_northing_from_lat_long": {"idx1" : 0,
+					   "idx2" : 500,
+					   "input headings" : ["Latitude", "Longitude"],
+					   "output headings" : ["Easting", "Northing"],
+					   "absolute_tolerance" : 5,
+					   "score" : 500
+                    },
+     "get_easting_northing_flood_probability": {"idx1" : 0,
+						"idx2" : 500,
+						"input headings" : ["Easting", "Northing"],
+						"output headings" : ["Probability Band"],
+						"score" : 2000
+                    },
+    "get_sorted_flood_probability": {"idx1" : 0,
+				     "idx2" : 500,
+				     "idx3" : 500,
+				     "idx4" : 995,
+				     "score" : 500
+                    },
+     "get_flood_cost": {"idx1" : 0,
+			"idx2" : 500,
+			"input headings" : ["Postcode"],
+			"output headings" : "Flood Cost",
+			"tolerance" : 1.0e-8,
+		     "score" : 500
+                    },
+     "get_annual_flood_risk": {"idx1" : 0,
+			       "idx2" : 500,
+			       "input headings" : ["Postcode", "Probability Band"],
+			       "output headings" : "Flood Risk",
+			       "tolerance" : 1.0e-6,
+			       "score" : 500
+                    },
+    "get_sorted_annual_flood_risk": {"idx1" : 0,
+				     "idx2" : 500,
+				     "idx3" : 995,
+				     "idx4" : 1490,
+				     "tolerance" : 1.0e-6,
+				     "score" : 500
+				    },
+    "tool" : {"score" : 100}
+}

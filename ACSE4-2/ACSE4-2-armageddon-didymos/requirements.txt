@@ -1,0 +1,10 @@
+numpy >= 1.13.0
+scipy
+pandas
+matplotlib
+pytest
+pytest-timeout
+sphinx
+cytoolz
+dask
+cloudpickle

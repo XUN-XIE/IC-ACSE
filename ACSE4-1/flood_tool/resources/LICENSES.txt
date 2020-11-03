@@ -1,0 +1,7 @@
+The postcode information is from data provided by the UK Office Of National Statistics under the Open Government Licence.
+
+http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+
+Flood risk data is from the [Environment Agency](https://environment.data.gov.uk/dataset/8d57464f-d465-11e4-8790-f0def148f590), adapted under the Open Government Licence.
+
+http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/

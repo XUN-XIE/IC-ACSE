@@ -1,0 +1,29 @@
+{
+    "name": "Lecture 7",
+    "endpoint": "ese/ug218/su18/lecture7",
+    "src": [
+        "lecture.ipynb"
+    ],
+    "tests": {
+      "tests/question-4_1.py": "ok_test",
+      "tests/question-4_2.py": "ok_test",
+      "tests/question-4_3.py": "ok_test",
+      "tests/question-4_4.py": "ok_test",
+      "tests/question-4_5.py": "ok_test",
+      "tests/question-4_6.py": "ok_test",
+      "tests/question-4_7.py": "ok_test",
+      "tests/question-4_8.py": "ok_test",
+      "tests/question-4_9.py": "ok_test"
+    },
+    "default_tests": [
+    ],
+    "protocols": [
+        "restore",
+        "file_contents",
+        "analytics",
+        "lock",
+        "unlock",
+        "grading",
+        "backup"
+    ]
+}

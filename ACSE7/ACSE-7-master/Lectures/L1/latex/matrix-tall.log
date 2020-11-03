@@ -1,0 +1,190 @@
+This is LuaTeX, Version 1.0.4 (MiKTeX 2.9.6350 64-bit)  (format=lualatex 2017.8.24)  26 FEB 2020 14:38
+ restricted system commands enabled.
+**matrix-tall.tex
+(./matrix-tall.tex
+LaTeX2e <2017-04-15>
+[\directlua]:1: module 'luaotfload-main' not found:
+	no field package.preload['luaotfload-main']
+	[kpse lua searcher] file not found: 'luaotfload-main'
+	[kpse C searcher] file not found: 'luaotfload-main'
+Error in luaotfload: reverting to OT1
+Babel <3.10> and hyphenation patterns for 1 language(s) loaded.
+("C:/Program Files/MiKTeX 2.9/tex/latex/base/article.cls"
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+("C:/Program Files/MiKTeX 2.9/tex/latex/base/size10.clo"
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 54.
+
+("C:/Program Files/MiKTeX 2.9/tex/latex/lm/ot1lmr.fd"
+File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+))
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(C:/Users/Matt/AppData/Roaming/MiKTeX/2.9/tex/latex/stackengine/stackengine.sty
+Package: stackengine 2017/02/13 v4.01\ Stacking text and objects in convenient w
+ays
+(C:/Users/Matt/AppData/Roaming/MiKTeX/2.9/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2017/01/02 v2.4 e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count87
+)
+(C:/Users/Matt/AppData/Roaming/MiKTeX/2.9/tex/latex/listofitems/listofitems.sty
+
+(C:/Users/Matt/AppData/Roaming/MiKTeX/2.9/tex/generic/listofitems/listofitems.t
+ex
+\loi_cnt_foreach_nest=\count88
+\loi_nestcnt=\count89
+)
+Package: listofitems 2019/08/21 v1.63 Grab items in lists using user-specified s
+ep char (CT)
+) ("C:/Program Files/MiKTeX 2.9/tex/latex/tools/calc.sty"
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count90
+\calc@Bcount=\count91
+\calc@Adimen=\dimen103
+\calc@Bdimen=\dimen104
+\calc@Askip=\skip43
+\calc@Bskip=\skip44
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count92
+\calc@Cskip=\skip45
+)
+\c@@stackindex=\count93
+\@boxshift=\skip46
+\stack@tmplength=\skip47
+\temp@stkl=\skip48
+\@stackedboxwidth=\skip49
+\@addedbox=\box26
+\@anchorbox=\box27
+\stackedbox=\box28
+\@centerbox=\box29
+\c@ROWcellindex@=\count94
+)
+\matfield=\skip50
+\tmplength=\skip51
+
+No file matrix-tall.aux.
+
+\openout1 = matrix-tall.aux
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 23.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 23.
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 24.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 24.
+
+! Undefined control sequence.
+<argument> \boldsymbol 
+            {m}
+l.25 \matbox{5}{2}{n}{1}{\boldsymbol{m}}
+                                       =
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 25.
+
+! Undefined control sequence.
+<argument> \boldsymbol 
+            {m}
+l.25 \matbox{5}{2}{n}{1}{\boldsymbol{m}}
+                                       =
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 25.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 25.
+
+! Undefined control sequence.
+<argument> \boldsymbol 
+            {d}
+l.26 ...ows{0}{\matbox{10}{2}{m}{1}{\boldsymbol{d}}}
+                                                  $
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 26.
+
+! Undefined control sequence.
+<argument> \boldsymbol 
+            {d}
+l.26 ...ows{0}{\matbox{10}{2}{m}{1}{\boldsymbol{d}}}
+                                                  $
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 26.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 26.
+
+[1
+
+{C:/Users/Matt/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+(./matrix-tall.aux))
+
+Here is how much of LuaTeX's memory you used:
+ 951 strings out of 494481
+ 125171,89155 words of node,token memory allocated
+ 341 words of node memory still in use:
+   2 hlist, 1 vlist, 1 rule, 2 glue, 45 glue_spec, 1 write nodes
+   avail lists: 1:1,2:18,3:8,4:2,5:32,6:31,7:190,8:29,9:109
+ 5118 multiletter control sequences out of 65536+200000
+ 30 fonts using 1252655 bytes
+ 27i,13n,57p,860b,209s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.enc}<C:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr10.pf
+b>
+Output written on matrix-tall.pdf (1 page, 50923 bytes).
+
+PDF statistics: 27 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 131072)
+ 1 words of extra memory for PDF output out of 10000 (max. 100000000)
+

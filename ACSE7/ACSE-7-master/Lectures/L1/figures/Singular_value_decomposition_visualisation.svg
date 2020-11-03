@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="-50 -440 1800 2100">
+ <title>Singular value decomposition visualisation</title>
+ <desc>Visualisation of the priciple of singular value decomposition by CMG Lee.</desc>
+ <style type="text/css">
+  #main { stroke-linejoin:round; stroke-width:4; stroke:#000000; fill:#000000; }
+  text  { font-family:Helvetica,Arial,sans-serif; font-size:200px; text-anchor:middle;
+          cursor:default; stroke:none; }
+  .dim  { font-size:160px; }
+  .mat  { font-weight:bold; }
+  .var  { font-style:italic; }
+ </style>
+ <defs>
+  <pattern id="pattern_grid" patternUnits="userSpaceOnUse" width="100" height="100">
+   <rect x="0" y="0" width="100" height="100" fill="none" stroke="#000000"/>
+  </pattern>
+  <pattern id="pattern_zero" patternUnits="userSpaceOnUse" width="100" height="100">
+   <rect x="0" y="0" width="100" height="100" fill="#ffffff" stroke="none"/>
+   <text x="50" y="50" fill="#cccccc"><tspan dy="0.7ex" font-size="100">0</tspan></text>
+  </pattern>
+  <pattern id="pattern_one" patternUnits="userSpaceOnUse" width="100" height="100">
+   <rect x="0" y="0" width="100" height="100" fill="#ffffff" stroke="none"/>
+   <text x="50" y="50" fill="#666666"><tspan dy="0.7ex" font-size="100">1</tspan></text>
+  </pattern>
+  <pattern id="pattern_eye4" patternUnits="userSpaceOnUse" width="400" height="400">
+   <rect x="0"   y="0"   width="400" height="400" fill="url(#pattern_zero)" stroke="none"/>
+   <rect x="0"   y="0"   width="100" height="100" fill="url(#pattern_one)"  stroke="none"/>
+   <rect x="100" y="100" width="100" height="100" fill="url(#pattern_one)"  stroke="none"/>
+   <rect x="200" y="200" width="100" height="100" fill="url(#pattern_one)"  stroke="none"/>
+   <rect x="300" y="300" width="100" height="100" fill="url(#pattern_one)"  stroke="none"/>
+  </pattern>
+
+  <text id="equal" x="0" y="1em"><tspan>=</tspan></text>
+
+  <g id="matrix_u">
+   <rect x="0"   y="-400" width="100" height="400" fill="#99cccc"/>
+   <rect x="100" y="-400" width="100" height="400" fill="#99cc66"/>
+   <rect x="200" y="-400" width="100" height="400" fill="#99ccff"/>
+   <rect x="300" y="-400" width="100" height="400" fill="#99cc99"/>
+  </g>
+  <g id="matrix_v">
+   <rect x="0"   y="-300" width="100" height="300" fill="#ccccff"/>
+   <rect x="100" y="-300" width="100" height="300" fill="#cc99ff"/>
+   <rect x="200" y="-300" width="100" height="300" fill="#ffccff"/>
+  </g>
+  <use id="matrix_ut" xlink:href="#matrix_u" transform="matrix(0,1, 1,0, 400,-400)"/>
+  <use id="matrix_vt" xlink:href="#matrix_v" transform="matrix(0,1, 1,0, 300,-300)"/>
+
+  <g id="matrices">
+   <g transform="translate(0,0)">
+    <rect x="0"   y="-400" width="300" height="400" fill="#cccccc"/>
+    <text x="150" y="1em" class="mat">M</text>
+    <text x="150" y="2em" class="dim"><tspan class="var">m</tspan><tspan>&#215;</tspan><tspan class="var">n</tspan></text>
+   </g>
+   <use xlink:href="#equal" transform="translate(400,0)"/>
+   <g transform="translate(500,0)">
+    <use xlink:href="#matrix_u"/>
+    <text x="200" y="1em"><tspan class="mat">U</tspan></text>
+    <text x="200" y="2em" class="dim"><tspan class="var">m</tspan><tspan>&#215;</tspan><tspan class="var">m</tspan></text>
+   </g>
+   <g transform="translate(1000,0)">
+    <rect x="0"   y="-400" width="300" height="400" fill="url(#pattern_zero)"/>
+    <rect x="0"   y="-400" width="100" height="100" fill="#ff9900"/>
+    <rect x="100" y="-300" width="100" height="100" fill="#ffcc00"/>
+    <rect x="200" y="-200" width="100" height="100" fill="#ffff00"/>
+    <text x="150" y="1em"><tspan class="mat">&#931;</tspan></text>
+    <text x="150" y="2em" class="dim"><tspan class="var">m</tspan><tspan>&#215;</tspan><tspan class="var">n</tspan></text>
+   </g>
+   <g transform="translate(1400,0)">
+    <use xlink:href="#matrix_vt"/>
+    <text x="150" y="1em"><tspan class="mat">V</tspan><tspan font-size="80%" dy="-0.5ex">*</tspan></text>
+    <text x="150" y="2em" class="dim"><tspan class="var">n</tspan><tspan>&#215;</tspan><tspan class="var">n</tspan></text>
+   </g>
+
+   <g transform="translate(100,800)">
+    <g transform="translate(0,0)">
+     <use xlink:href="#matrix_u"/>
+     <text x="200" y="1em"><tspan class="mat">U</tspan></text>
+    </g>
+    <g transform="translate(500,0)">
+     <use xlink:href="#matrix_ut"/>
+     <text x="200" y="1em"><tspan class="mat">U</tspan><tspan font-size="80%" dy="-0.5ex">*</tspan></text>
+    </g>
+    <use xlink:href="#equal" transform="translate(1000,0)"/>
+    <g transform="translate(1100,0)">
+    <rect x="0"   y="-400" width="400" height="400" fill="url(#pattern_eye4)"/>
+     <text x="200" y="1em"><tspan class="mat">I</tspan><tspan font-size="80%" dy="0.5ex" class="var">m</tspan></text>
+    </g>
+   </g>
+
+   <g transform="translate(100,1400)">
+    <g transform="translate(100,0)">
+     <use xlink:href="#matrix_v"/>
+     <text x="150" y="1em"><tspan class="mat">V</tspan></text>
+    </g>
+    <g transform="translate(500,0)">
+     <use xlink:href="#matrix_vt"/>
+     <text x="150" y="1em"><tspan class="mat">V</tspan><tspan font-size="80%" dy="-0.5ex">*</tspan></text>
+    </g>
+    <use xlink:href="#equal" transform="translate(1000,0)"/>
+    <g transform="translate(1100,0)">
+    <rect x="100"  y="-300" width="300" height="300" fill="url(#pattern_eye4)"/>
+     <text x="250" y="1em"><tspan class="mat">I</tspan><tspan font-size="80%" dy="0.5ex" class="var">n</tspan></text>
+    </g>
+   </g>
+  </g>
+  <mask id="mask_matrices"><use xlink:href="#matrices"/></mask>
+ </defs>
+ <circle cx="0" cy="0" r="99999" fill="#ffffff"/>
+ <g id="main">
+  <use xlink:href="#matrices"/>
+  <circle cx="0" cy="0" r="99999" fill="url(#pattern_grid)" mask="url(#mask_matrices)"/>
+ </g>
+</svg>

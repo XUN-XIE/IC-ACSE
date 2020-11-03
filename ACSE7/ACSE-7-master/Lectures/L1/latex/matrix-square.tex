@@ -1,0 +1,27 @@
+\documentclass{article}
+\usepackage{stackengine}
+\stackMath
+\newlength\matfield
+\newlength\tmplength
+\def\matscale{1.}
+\newcommand\dimbox[3]{%
+  \setlength\matfield{\matscale\baselineskip}%
+  \setbox0=\hbox{\vphantom{X}\smash{#3}}%
+  \setlength{\tmplength}{#1\matfield-\ht0-\dp0}%
+  \fboxrule=1pt\fboxsep=-\fboxrule\relax%
+  \fbox{\makebox[#2\matfield]{\addstackgap[.5\tmplength]{\box0}}}%
+}
+\newcommand\raiserows[2]{%
+   \setlength\matfield{\matscale\baselineskip}%
+   \raisebox{#1\matfield}{#2}%
+}
+\newcommand\matbox[5]{
+  \stackunder{\dimbox{#1}{#2}{$\mathbf{#5}$}}{\small(#3\times #4)}%
+}
+\parskip 1em
+\begin{document}
+$\renewcommand\matscale{.8}
+\matbox{10}{10}{m}{n}{G}  
+\matbox{10}{2}{n}{1}{\boldsymbol{m}} =
+\raiserows{0}{\matbox{10}{2}{m}{1}{\boldsymbol{d}}}$
+\end{document}

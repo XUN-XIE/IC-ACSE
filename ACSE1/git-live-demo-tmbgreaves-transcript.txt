@@ -1,0 +1,296 @@
+I'm in a blank directory for this demo. See:
+$ ls -la
+total 8
+drwxrwxr-x  2 tmbgreaves tmbgreaves 4096 Oct  3 13:35 .
+drwxr-xr-x 23 tmbgreaves tmbgreaves 4096 Oct  3 13:35 ..
+$ echo "NOthing there yet."
+NOthing there yet.
+$ pwd
+/home/tmbgreaves/acse-git-demo
+$ echo "I'll check git is working properly for me"
+I'll check git is working properly for me
+$ git clone git@github.com:acse-2019/ACSE-1.git
+Cloning into 'ACSE-1'...
+Enter passphrase for key '/home/tmbgreaves/.ssh/id_rsa': 
+remote: Enumerating objects: 171, done.
+remote: Counting objects: 100% (171/171), done.
+remote: Compressing objects: 100% (113/113), done.
+remote: Total 171 (delta 77), reused 94 (delta 42), pack-reused 0
+Receiving objects: 100% (171/171), 203.39 KiB | 743.00 KiB/s, done.
+Resolving deltas: 100% (77/77), done.
+$ ssh-add ~/.ssh/id_rsa
+Could not open a connection to your authentication agent.
+$ eval `ssh-agent`
+Agent pid 31510
+$ ssh-add ~/.ssh/id_rsa
+Enter passphrase for /home/tmbgreaves/.ssh/id_rsa: 
+Identity added: /home/tmbgreaves/.ssh/id_rsa (/home/tmbgreaves/.ssh/id_rsa)
+$ echo "There I noticed I'd failed to add my ssh keys, so added them. This stops me having to type in my ssh key every time I do a git operation :-)"
+There I noticed I'd failed to add my ssh keys, so added them. This stops me having to type in my ssh key every time I do a git operation :-)
+$ rm -rf ACSE-1/
+$ ls -la
+total 8
+drwxrwxr-x  2 tmbgreaves tmbgreaves 4096 Oct  3 14:09 .
+drwxr-xr-x 23 tmbgreaves tmbgreaves 4096 Oct  3 13:35 ..
+$ clear
+
+$ echo "Still here :)"
+Still here :)
+$ git clone git@github.com:acse-2019/acse-1-git-live.git
+Cloning into 'acse-1-git-live'...
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+Receiving objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
+$ ls
+acse-1-git-live
+$ exit
+End of transmission.
+tmbgreaves@tmbg-devops:~$ python shellshare -r acse-git-tmbgreaves
+Current terminal size is 38x93.
+It's too big to be viewed on smaller screens.
+You can resize it anytime.
+Sharing terminal in https://shellshare.net/r/acse-git-tmbgreaves
+tmbgreaves@tmbg-devops:~$ export PS1=$\ 
+$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$ ls
+acse-autotest         acse-labs-setup        azure-quickstart-templates  shellshare
+acse-git-demo         acse-nodepool-testing  firedrake
+acse-jhub-deploy      acse4-test-vm          onedrive-2.3.9
+acse-jhub-singleuser  acse4_project_1_model  onedrive-2.3.9.tar.gz
+$ cd acse-git-demo/
+$ ls
+acse-1-git-live
+$ rm -rf acse-1-git-live/
+$ git clone git@github.com:acse-2019/acse-1-git-live.git
+Cloning into 'acse-1-git-live'...
+Enter passphrase for key '/home/tmbgreaves/.ssh/id_rsa': 
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
+Receiving objects: 100% (3/3), done.
+$ git clone git@github.com:acse-2019/acse-1-git-live james-repo
+Cloning into 'james-repo'...
+Enter passphrase for key '/home/tmbgreaves/.ssh/id_rsa': 
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
+Receiving objects: 100% (3/3), done.
+$ cd acse-1-git-live/
+$ ls
+hello.txt
+$ cat hello.txt 
+Hello!
+$ vim hello.txt 
+$ cat hello.txt 
+Hello!
+
+Hello James, it's great to be starting a new ACSE course today.
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   hello.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git add hello.txt 
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   hello.txt
+
+$ export EDITOR=vim
+$ git commit
+[master 5b04007] Commit replying to your greeting
+ Committer: Ubuntu <tmbgreaves@tmbg-devops.22bbqxo3rawudhm2klx5qumtkb.ax.internal.cloudapp.net>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 2 insertions(+)
+$ git push
+Enter passphrase for key '/home/tmbgreaves/.ssh/id_rsa': 
+Counting objects: 3, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 366 bytes | 366.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To github.com:acse-2019/acse-1-git-live.git
+   d920d51..5b04007  master -> master
+$ git config --global --edit
+$ git commit --amend --reset-author
+[master 1568000] Commit replying to your greeting
+ 1 file changed, 2 insertions(+)
+$ git push
+Enter passphrase for key '/home/tmbgreaves/.ssh/id_rsa': 
+To github.com:acse-2019/acse-1-git-live.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'git@github.com:acse-2019/acse-1-git-live.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+$ git push -f
+Enter passphrase for key '/home/tmbgreaves/.ssh/id_rsa': 
+Counting objects: 3, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 330 bytes | 330.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To github.com:acse-2019/acse-1-git-live.git
+ + 5b04007...1568000 master -> master (forced update)
+$ eval `ssh-agent`
+Agent pid 38331
+$ git pull
+Enter passphrase for key '/home/tmbgreaves/.ssh/id_rsa': 
+
+(reverse-i-search)`add': user^Cd jrper
+$ ssh-add ~/.ssh/id_rsa
+Enter passphrase for /home/tmbgreaves/.ssh/id_rsa: 
+Bad passphrase, try again for /home/tmbgreaves/.ssh/id_rsa: 
+Identity added: /home/tmbgreaves/.ssh/id_rsa (/home/tmbgreaves/.ssh/id_rsa)
+$ git log --pretty=oneline
+15680004ab3f3446158dc67f96f0fe4ec4e71ad9 (HEAD -> master, origin/master, origin/HEAD) Commit replying to your greeting
+d920d5164eaf240d6ce8e89506db4e6d6e708977 New file.
+$ vim hello.txt 
+$ git add hello.txt 
+$ git commit
+[master f7ddc97] Not the brightest weather today, it seems.
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git push
+Counting objects: 3, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 362 bytes | 362.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To github.com:acse-2019/acse-1-git-live.git
+   1568000..f7ddc97  master -> master
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+$ git log --pretty=oneline
+f7ddc9788ce5474261e000dfe0433cd181a6f9a0 (HEAD -> master, origin/master, origin/HEAD) Not the brightest weather today, it seems.
+15680004ab3f3446158dc67f96f0fe4ec4e71ad9 Commit replying to your greeting
+d920d5164eaf240d6ce8e89506db4e6d6e708977 New file.
+$ git diff origin/master
+$ git pull
+remote: Enumerating objects: 10, done.
+remote: Counting objects: 100% (10/10), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 6 (delta 2), reused 6 (delta 2), pack-reused 0
+Unpacking objects: 100% (6/6), done.
+From github.com:acse-2019/acse-1-git-live
+   f7ddc97..cf89a6a  master     -> origin/master
+Updating f7ddc97..cf89a6a
+Fast-forward
+ hello.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ pwd
+/home/tmbgreaves/acse-git-demo/acse-1-git-live
+$ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+$ git branch tmbgreaves-dev
+$ git checkout tmbgreaves-dev
+Switched to branch 'tmbgreaves-dev'
+$ git branch
+  master
+* tmbgreaves-dev
+$ ls
+hello.txt
+$ cat > goodbye.txt
+Great to see you today, James.
+$ vim hello.txt 
+$ git status
+On branch tmbgreaves-dev
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   hello.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	goodbye.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git add hello.txt goodbye.txt 
+$ git commit
+[tmbgreaves-dev d79e29c] A first edit of my new development branch
+ 2 files changed, 3 insertions(+)
+ create mode 100644 goodbye.txt
+$ vim goodbye.txt 
+$ git add goodbye.txt 
+$ git commit
+[tmbgreaves-dev 4376845] Complete my work on the dev branch.
+ 1 file changed, 2 insertions(+)
+$ git log --pretty=online
+fatal: invalid --pretty format: online
+$ git log --pretty=oneline
+4376845b75605b0c28896ffa8bd24ac1c2abbdc1 (HEAD -> tmbgreaves-dev) Complete my work on the dev branch.
+d79e29c4d9c3954d864aa51729754151897a5bc8 A first edit of my new development branch
+cf89a6a754d6b0dae057d211172289c418e2393c (origin/master, origin/HEAD, master) Fixing conflict in hello.txt.
+eeee079b1d4b071852b951eed28d05aed7e630ce switch out today.
+f7ddc9788ce5474261e000dfe0433cd181a6f9a0 Not the brightest weather today, it seems.
+15680004ab3f3446158dc67f96f0fe4ec4e71ad9 Commit replying to your greeting
+d920d5164eaf240d6ce8e89506db4e6d6e708977 New file.
+$ git push
+fatal: The current branch tmbgreaves-dev has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin tmbgreaves-dev
+
+$ git push --set-upstream origin tmbgreaves-dev
+Counting objects: 7, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (7/7), 828 bytes | 828.00 KiB/s, done.
+Total 7 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'tmbgreaves-dev' on GitHub by visiting:
+remote:      https://github.com/acse-2019/acse-1-git-live/pull/new/tmbgreaves-dev
+remote: 
+To github.com:acse-2019/acse-1-git-live.git
+ * [new branch]      tmbgreaves-dev -> tmbgreaves-dev
+Branch 'tmbgreaves-dev' set up to track remote branch 'tmbgreaves-dev' from 'origin'.
+$ 

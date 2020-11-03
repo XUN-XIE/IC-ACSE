@@ -1,0 +1,250 @@
+jrper@ese-hyphen:~/acse_example$ mkdir mycoolproject                            
+jrper@ese-hyphen:~/acse_example$ cd mycoolproject/                              
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git init
+Initialised empty Git repository in /home/jrper/acse_example/tmp/.git/
+jrper@ese-hyphen:~/acse_example/tmp$ touch hello
+jrper@ese-hyphen:~/acse_example/tmp$ git status
+On branch master
+
+Initial commit
+
+nothing to commit (create/copy files and use "git add" to track)
+jrper@ese-hyphen:~/acse_example/tmp$ git status -u
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	hello
+
+nothing added to commit but untracked files present (use "git add" to track)
+jrper@ese-hyphen:~/acse_example/tmp$ cd ..
+jrper@ese-hyphen:~/acse_example$ rm -rf tmp/
+jrper@ese-hyphen:~/acse_example$ ls
+jrper@ese-hyphen:~/acse_example$ clear
+
+jrper@ese-hyphen:~/acse_example$ mkdir mycoolproject
+jrper@ese-hyphen:~/acse_example$ cd mycoolproject/
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git init 
+Initialised empty Git repository in /home/jrper/acse_example/mycoolproject/.git/
+jrper@ese-hyphen:~/acse_example/mycoolproject$ ls -a
+.  ..  .git
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+
+Initial commit
+
+nothing to commit (create/copy files and use "git add" to track)
+jrper@ese-hyphen:~/acse_example/mycoolproject$ nano
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt
+Hello!
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git add hello.txt
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+	new file:   hello.txt
+
+Untracked files not listed (use -u option to show untracked files)
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git commit
+[master (root-commit) d920d51] New file.
+ 1 file changed, 1 insertion(+)
+ create mode 100644 hello.txt
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+nothing to commit (use -u to show untracked files)
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git log
+commit d920d5164eaf240d6ce8e89506db4e6d6e708977
+Author: James Percival <j.percival@imperial.ac.uk>
+Date:   Thu Oct 3 15:08:32 2019 +0100
+
+    New file.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ nano hello.txt 
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   hello.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git checkout hello.txt
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt
+Hello!
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git remote add origin git@github.com:acse-2019/case-1-git-live.git
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git remote set-url origin git@github.com:acse-2019/asce-1-git-live.git
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git remote set-url origin git@github.com:acse-2019/acse-1-git-live.git
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git push -u origin master
+Enter passphrase for key '/home/jrper/.ssh/id_rsa': 
+Enter passphrase for key '/home/jrper/.ssh/id_rsa': 
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 224 bytes | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To git@github.com:acse-2019/acse-1-git-live.git
+ * [new branch]      master -> master
+Branch master set up to track remote branch master from origin.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ ls 
+hello.txt
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt
+Hello!
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git fetch
+Enter passphrase for key '/home/jrper/.ssh/id_rsa': 
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From github.com:acse-2019/acse-1-git-live
+   d920d51..1568000  master     -> origin/master
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt
+Hello!
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git pull
+Enter passphrase for key '/home/jrper/.ssh/id_rsa': 
+Updating d920d51..1568000
+Fast-forward
+ hello.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt
+Hello!
+
+Hello James, it's great to be starting a new ACSE course today.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ nano hello.txt
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt 
+Hello!
+
+Hello James, it's great to be starting a new ACSE course this morning.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git add -u
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git commit -m "switch out today."[master eeee079] switch out today.
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+nothing to commit (use -u to show untracked files)
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git push
+Enter passphrase for key '/home/jrper/.ssh/id_rsa': 
+To git@github.com:acse-2019/acse-1-git-live.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'git@github.com:acse-2019/acse-1-git-live.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git pull
+Enter passphrase for key '/home/jrper/.ssh/id_rsa': 
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 3 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From github.com:acse-2019/acse-1-git-live
+   1568000..f7ddc97  master     -> origin/master
+Auto-merging hello.txt
+CONFLICT (content): Merge conflict in hello.txt
+Automatic merge failed; fix conflicts and then commit the result.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+Your branch and 'origin/master' have diverged,
+and have 1 and 1 different commit each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+	both modified:   hello.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git mergetool
+
+This message is displayed because 'merge.tool' is not configured.
+See 'git mergetool --tool-help' or 'git help config' for more details.
+'git mergetool' will now attempt to use one of the following tools:
+opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare emerge vimdiff
+Merging:
+hello.txt
+
+Normal merge conflict for 'hello.txt':
+  {local}: modified file
+  {remote}: modified file
+Hit return to start merge resolution tool (meld): 
+Failed to connect to Mir: Failed to connect to server socket: No such file or directory
+Unable to init server: Could not connect: Connection refused
+Failed to connect to Mir: Failed to connect to server socket: No such file or directory
+Unable to init server: Could not connect: Connection refused
+
+(meld:27743): Gtk-CRITICAL **: gtk_icon_theme_get_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed
+Traceback (most recent call last):
+  File "/usr/bin/meld", line 282, in <module>
+    setup_resources()
+  File "/usr/bin/meld", line 191, in setup_resources
+    Gtk.IconTheme.get_default().append_search_path(icon_dir)
+AttributeError: 'NoneType' object has no attribute 'append_search_path'
+hello.txt seems unchanged.
+Was the merge successful? [y/n] n
+merge of hello.txt failed
+Continue merging other unresolved paths (y/n) ? n
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt
+Hello!
+
+<<<<<<< HEAD
+Hello James, it's great to be starting a new ACSE course this morning.
+=======
+Hello James, it's great to be starting a new ACSE course this slightly cloudy London day.
+>>>>>>> f7ddc9788ce5474261e000dfe0433cd181a6f9a0
+jrper@ese-hyphen:~/acse_example/mycoolproject$ nano hello.txt 
+jrper@ese-hyphen:~/acse_example/mycoolproject$ cat hello.txt 
+Hello!
+
+Hello James, it's great to be starting a new ACSE course this slightly cloudy morning.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+Your branch and 'origin/master' have diverged,
+and have 1 and 1 different commit each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+	both modified:   hello.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git add hello.txt
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git status
+On branch master
+Your branch and 'origin/master' have diverged,
+and have 1 and 1 different commit each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+
+	modified:   hello.txt
+
+Untracked files not listed (use -u option to show untracked files)
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git commit -m "Fixing conflict in hello.txt."
+[master cf89a6a] Fixing conflict in hello.txt.
+jrper@ese-hyphen:~/acse_example/mycoolproject$ git push
+Enter passphrase for key '/home/jrper/.ssh/id_rsa': 
+Counting objects: 6, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (6/6), 580 bytes | 0 bytes/s, done.
+Total 6 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 1 local object.
+To git@github.com:acse-2019/acse-1-git-live.git
+   f7ddc97..cf89a6a  master -> master
+jrper@ese-hyphen:~/acse_example/mycoolproject$ 
+jrper@ese-hyphen:~/acse_example/mycoolproject$ 
